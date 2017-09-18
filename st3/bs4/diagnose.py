@@ -1,5 +1,7 @@
 """Diagnostic functions, mainly for use when doing tech support."""
 
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
 __license__ = "MIT"
 
 import cProfile
@@ -56,7 +58,8 @@ def diagnose(data):
         data = data.read()
     elif os.path.exists(data):
         print('"%s" looks like a filename. Reading data from the file.' % data)
-        data = open(data).read()
+        with open(data) as fp:
+            data = fp.read()
     elif data.startswith("http:") or data.startswith("https:"):
         print('"%s" looks like a URL. Beautiful Soup is not an HTTP client.' % data)
         print("You need to use some other library to get the document behind the URL, and feed that document to Beautiful Soup.")
@@ -147,7 +150,7 @@ def rword(length=5):
 def rsentence(length=4):
     "Generate a random sentence-like string."
     return " ".join(rword(random.randint(4,9)) for i in range(length))
-        
+
 def rdoc(num_elements=1000):
     """Randomly generate an invalid HTML document."""
     tag_names = ['p', 'div', 'span', 'i', 'b', 'script', 'table']
@@ -171,7 +174,7 @@ def benchmark_parsers(num_elements=100000):
     print("Comparative parser benchmark on Beautiful Soup %s" % __version__)
     data = rdoc(num_elements)
     print("Generated a large invalid HTML document (%d bytes)." % len(data))
-    
+
     for parser in ["lxml", ["lxml", "html"], "html5lib", "html.parser"]:
         success = False
         try:

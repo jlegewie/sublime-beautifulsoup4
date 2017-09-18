@@ -1,3 +1,94 @@
+= 4.6.0 (20170507) =
+
+* Added the `Tag.get_attribute_list` method, which acts like `Tag.get` for
+  getting the value of an attribute, but which always returns a list,
+  whether or not the attribute is a multi-value attribute. [bug=1678589]
+
+* It's now possible to use a tag's namespace prefix when searching,
+  e.g. soup.find('namespace:tag') [bug=1655332]
+
+* Improved the handling of empty-element tags like <br> when using the
+  html.parser parser. [bug=1676935]
+
+* HTML parsers treat all HTML4 and HTML5 empty element tags (aka void
+  element tags) correctly. [bug=1656909]
+
+* Namespace prefix is preserved when an XML tag is copied. Thanks
+  to Vikas for a patch and test. [bug=1685172]
+
+= 4.5.3 (20170102) =
+
+* Fixed foster parenting when html5lib is the tree builder. Thanks to
+  Geoffrey Sneddon for a patch and test.
+  
+* Fixed yet another problem that caused the html5lib tree builder to
+  create a disconnected parse tree. [bug=1629825]
+
+= 4.5.2 (20170102) =
+
+* Apart from the version number, this release is identical to
+  4.5.3. Due to user error, it could not be completely uploaded to
+  PyPI. Use 4.5.3 instead.
+
+= 4.5.1 (20160802) =
+
+* Fixed a crash when passing Unicode markup that contained a
+  processing instruction into the lxml HTML parser on Python
+  3. [bug=1608048]
+
+= 4.5.0 (20160719) =
+
+* Beautiful Soup is no longer compatible with Python 2.6. This
+  actually happened a few releases ago, but it's now official.
+
+* Beautiful Soup will now work with versions of html5lib greater than
+  0.99999999. [bug=1603299]
+
+* If a search against each individual value of a multi-valued
+  attribute fails, the search will be run one final time against the
+  complete attribute value considered as a single string. That is, if
+  a tag has class="foo bar" and neither "foo" nor "bar" matches, but
+  "foo bar" does, the tag is now considered a match.
+
+  This happened in previous versions, but only when the value being
+  searched for was a string. Now it also works when that value is
+  a regular expression, a list of strings, etc. [bug=1476868]
+
+* Fixed a bug that deranged the tree when a whitespace element was
+  reparented into a tag that contained an identical whitespace
+  element. [bug=1505351]
+
+* Added support for CSS selector values that contain quoted spaces,
+  such as tag[style="display: foo"]. [bug=1540588]
+
+* Corrected handling of XML processing instructions. [bug=1504393]
+
+* Corrected an encoding error that happened when a BeautifulSoup
+  object was copied. [bug=1554439]
+
+* The contents of <textarea> tags will no longer be modified when the
+  tree is prettified. [bug=1555829]
+
+* When a BeautifulSoup object is pickled but its tree builder cannot
+  be pickled, its .builder attribute is set to None instead of being
+  destroyed. This avoids a performance problem once the object is
+  unpickled. [bug=1523629]
+
+* Specify the file and line number when warning about a
+  BeautifulSoup object being instantiated without a parser being
+  specified. [bug=1574647]
+
+* The `limit` argument to `select()` now works correctly, though it's
+  not implemented very efficiently. [bug=1520530]
+
+* Fixed a Python 3 ByteWarning when a URL was passed in as though it
+  were markup. Thanks to James Salter for a patch and
+  test. [bug=1533762]
+
+* We don't run the check for a filename passed in as markup if the
+  'filename' contains a less-than character; the less-than character
+  indicates it's most likely a very small document. [bug=1577864]
+
 = 4.4.1 (20150928) =
 
 * Fixed a bug that deranged the tree when part of it was
@@ -455,7 +546,7 @@ Bug fixes:
 * Renamed Tag.nsprefix to Tag.prefix, for consistency with
   NamespacedAttribute.
 
-* Fixed a test failure that occured on Python 3.x when chardet was
+* Fixed a test failure that occurred on Python 3.x when chardet was
   installed.
 
 * Made prettify() return Unicode by default, so it will look nice on
@@ -489,7 +580,7 @@ Bug fixes:
 
 * Restored compatibility with Python 2.6.
 
-* The install process no longer installs docs or auxillary text files.
+* The install process no longer installs docs or auxiliary text files.
 
 * It's now possible to deepcopy a BeautifulSoup object created with
   Python's built-in HTML parser.
@@ -728,7 +819,7 @@ Added an import that makes BS work in Python 2.3.
 Fixed a UnicodeDecodeError when unpickling documents that contain
 non-ASCII characters.
 
-Fixed a TypeError that occured in some circumstances when a tag
+Fixed a TypeError that occurred in some circumstances when a tag
 contained no text.
 
 Jump through hoops to avoid the use of chardet, which can be extremely
